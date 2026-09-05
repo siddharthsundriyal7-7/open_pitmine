@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROCKFALL AI — Intelligent Mine Safety Monitoring</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            industrial: {
+              950: '#070a0f',
+              900: '#0d131d',
+              850: '#131b29',
+              800: '#192436',
+              700: '#26354d',
+              orange: '#ff7a00',
+              amber: '#f59e0b',
+              danger: '#ef4444',
+              safe: '#10b981',
+              cyan: '#06b6d4',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            heading: ['"Chakra Petch"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Industrial Theme CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-industrial-950 text-slate-100 min-h-screen flex flex-col antialiased select-none">
+
+  <!-- ========================================================================
+       SCREEN 1: SECURE INDUSTRIAL LOGIN SCREEN
+       ======================================================================== -->
+  <div id="screen-login" class="flex-1 flex items-center justify-center p-4 relative overflow-hidden">
+    <!-- Subtle Background Tactical Grid & Ambient Pulse -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,122,0,0.06)_0%,transparent_60%)] pointer-events-none"></div>
+    <div class="hud-grid-overlay absolute inset-0 opacity-40 pointer-events-none"></div>
+
+    <div class="relative w-full max-w-lg industrial-card p-6 md:p-8 bg-industrial-900/90 shadow-2xl border-slate-800">
+      <div class="corner-bottom-left"></div>
+      <div class="corner-bottom-right"></div>
+
+      <!-- Top Tactical Header -->
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-500 shadow-md shadow-amber-500/10">
+            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h1 class="font-heading font-bold text-xl tracking-wider text-slate-100 flex items-center gap-2">
+              ROCKFALL <span class="text-amber-500">AI</span>
+            </h1>
+            <p class="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Intelligent Mine Safety Monitoring</p>
+          </div>
+        </div>
+        <div class="text-right font-mono text-[10px] text-slate-500">
+          <div class="flex items-center justify-end gap-1.5 text-emerald-400">
+            <span class="status-dot online"></span>
+            <span>SYSTEM READY</span>
+          </div>
+          <span>SEC-LAYER v4.2</span>
+        </div>
+      </div>
+
+      <!-- Operational Role Selector -->
+      <div class="mb-6">
+        <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Select Operational Role:</label>
+        <div class="grid grid-cols-2 gap-2 p-1 bg-industrial-950 rounded border border-slate-800">
+          <button type="button" data-role="ADMINISTRATOR" class="auth-role-tab py-2.5 px-3 rounded text-xs font-heading font-bold tracking-wider transition-all flex items-center justify-center gap-2 bg-amber-500/20 border border-amber-500 text-amber-400">
+            <i data-lucide="shield" class="w-4 h-4"></i>
+            <span>ADMINISTRATOR</span>
+          </button>
+          <button type="button" data-role="WORKER" class="auth-role-tab py-2.5 px-3 rounded text-xs font-heading font-bold tracking-wider transition-all flex items-center justify-center gap-2 border border-slate-800 text-slate-400 hover:text-slate-200">
+            <i data-lucide="hard-hat" class="w-4 h-4"></i>
+            <span>MINE WORKER</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Role Permission Summary Callout -->
+      <div id="role-permission-details" class="p-3 rounded bg-industrial-850/80 border border-slate-800 mb-6">
+        <div class="text-xs text-amber-400 font-mono font-semibold uppercase tracking-wider mb-1">Administrator Access Profile</div>
+        <p class="text-xs text-slate-300">UAV/Drone aerial surveillance, drone image management, AI model diagnostics, telemetry streams, and full compliance reporting.</p>
+      </div>
+
+      <!-- Credentials Form -->
+      <form id="login-form" class="space-y-4">
+        <!-- Error Banner -->
+        <div id="login-error-msg" class="hidden p-3 rounded bg-red-950/60 border border-red-800/80 text-red-300 text-xs font-mono"></div>
+
+        <div>
+          <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-1.5" for="login-username">Operator Terminal ID / Email</label>
+          <div class="relative">
+            <input type="text" id="login-username" required class="w-full bg-industrial-950 border border-slate-800 rounded px-3 py-2.5 pl-9 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono" placeholder="user@rockfall.ai">
+            <i data-lucide="user" class="w-4 h-4 text-slate-500 absolute left-3 top-3"></i>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-1.5" for="login-password">Cryptographic Security Passkey</label>
+          <div class="relative">
+            <input type="password" id="login-password" required class="w-full bg-industrial-950 border border-slate-800 rounded px-3 py-2.5 pl-9 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500 font-mono" placeholder="••••••••••••">
+            <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3 top-3"></i>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="btn-industrial-primary w-full justify-center py-3 text-sm mt-2">
+          <span id="login-spinner" class="hidden"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i></span>
+          <span id="login-btn-text">INITIALIZE SECURE LOGIN →</span>
+        </button>
+      </form>
+
+      <!-- 1-Click Demo Fill Shortcuts -->
+      <div class="mt-6 pt-4 border-t border-slate-800/80">
+        <div class="text-[11px] font-mono text-slate-500 uppercase tracking-wider text-center mb-2.5">Instant Demo Accounts (One-Click Auto Fill)</div>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" id="btn-demo-admin" class="btn-industrial-outline text-xs justify-center py-1.5 border-slate-800 text-slate-300">
+            <i data-lucide="shield" class="w-3.5 h-3.5 text-amber-500"></i> Admin (UAV Fleet)
+          </button>
+          <button type="button" id="btn-demo-worker" class="btn-industrial-outline text-xs justify-center py-1.5 border-slate-800 text-slate-300">
+            <i data-lucide="hard-hat" class="w-3.5 h-3.5 text-cyan-400"></i> Worker (Fixed Cams)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       SCREEN 2: MAIN COMMAND CENTER (ADMIN & WORKER)
+       ======================================================================== -->
+  <div id="screen-command-center" class="hidden min-h-screen flex flex-col bg-industrial-950">
+    
+    <!-- Top Tactical Telemetry Navigation Bar -->
+    <header class="h-14 bg-industrial-900 border-b border-slate-800 px-4 flex items-center justify-between z-30 sticky top-0">
+      <!-- App Brand & Role Title -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-500">
+            <i data-lucide="shield-alert" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="font-heading font-bold text-base tracking-wider text-slate-100">ROCKFALL <span class="text-amber-500">AI</span></span>
+            <span class="hidden sm:inline-block ml-2 text-[10px] font-mono text-slate-400">| OPEN-PIT COMMAND</span>
+          </div>
+        </div>
+        <span id="header-role-tag" class="badge-tech badge-tech-orange text-xs">ADMINISTRATOR</span>
+      </div>
+
+      <!-- Live Operations HUD Telemetry Chips -->
+      <div class="hidden lg:flex items-center gap-4 text-xs font-mono">
+        <div class="flex items-center gap-2 px-2.5 py-1 rounded bg-industrial-950 border border-slate-800">
+          <span class="status-dot online"></span>
+          <span class="text-slate-400">AI ENGINE:</span>
+          <span class="text-slate-200 font-semibold">EfficientNet-B0 (CUDA)</span>
+        </div>
+        <div class="flex items-center gap-2 px-2.5 py-1 rounded bg-industrial-950 border border-slate-800">
+          <i data-lucide="plane" class="w-3.5 h-3.5 text-amber-500"></i>
+          <span class="text-slate-400">UAV-01:</span>
+          <span id="uav-bat-display" class="text-emerald-400 font-semibold">84%</span>
+          <span class="text-slate-500">|</span>
+          <span id="uav-sig-display" class="text-cyan-400 font-semibold">98%</span>
+        </div>
+        <div class="flex items-center gap-2 px-2.5 py-1 rounded bg-industrial-950 border border-slate-800">
+          <i data-lucide="server" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span class="text-slate-400">BACKEND:</span>
+          <span class="text-emerald-400 font-semibold">99.98% SLA</span>
+        </div>
+      </div>
+
+      <!-- User Profile & Action Tools -->
+      <div class="flex items-center gap-3">
+        <!-- Audio Mute / Sound Toggle -->
+        <button id="btn-audio-mute-toggle" title="Toggle Safety Audio / Sirens" class="p-2 rounded bg-industrial-950 border border-slate-800 hover:border-amber-500 text-slate-300">
+          <i data-lucide="volume-2" class="w-4 h-4 text-amber-500"></i>
+        </button>
+
+        <!-- User Info Badge -->
+        <div class="hidden md:flex flex-col text-right">
+          <span id="header-user-name" class="text-xs font-bold text-slate-200">Elena Rostova</span>
+          <span id="header-user-title" class="text-[10px] font-mono text-slate-400">Geotech Director (<span id="header-badge-id">GEO-01</span>)</span>
+        </div>
+
+        <!-- Logout Button -->
+        <button class="btn-logout-trigger btn-industrial-outline text-xs py-1.5 px-3 border-slate-700 hover:border-red-500 hover:text-red-400">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Logout</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Command Workspace Layout -->
+    <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+      
+      <!-- Side Navigation Panel -->
+      <aside class="w-full md:w-64 bg-industrial-900 border-r border-slate-800 flex flex-col shrink-0 p-3">
+        <div class="text-[11px] font-mono text-slate-500 uppercase tracking-wider px-3 mb-2">Operations Console</div>
+        
+        <!-- Navigation Links Container -->
+        <nav id="sidebar-nav-links" class="space-y-1 flex-1">
+          <!-- Dynamically populated based on role -->
+        </nav>
+
+        <!-- Bottom System Status Card -->
+        <div class="mt-4 pt-3 border-t border-slate-800/80 p-3 rounded bg-industrial-950/70 border border-slate-800/80 text-[11px] font-mono">
+          <div class="text-slate-400 flex items-center justify-between mb-1">
+            <span>PIT BENCH SECTOR:</span>
+            <span class="text-amber-400 font-bold">SECTOR B-4</span>
+          </div>
+          <div class="text-slate-400 flex items-center justify-between">
+            <span>SHIFT TIMER:</span>
+            <span class="text-slate-200">06:42:18</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content View Area -->
+      <main class="flex-1 overflow-y-auto p-4 md:p-6 bg-industrial-950">
+        
+        <!-- TOP DYNAMIC ALERT BANNER (High Risk or Normal) -->
+        <div id="dashboard-alert-banner"></div>
+
+        <!-- ====================================================================
+             VIEW: DASHBOARD (ADMIN & WORKER)
+             ==================================================================== -->
+        <section id="view-dashboard" class="view-panel space-y-6">
+          
+          <!-- View Heading & Fast Switcher -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+              <h2 id="dashboard-main-heading" class="font-heading font-bold text-lg text-slate-100 tracking-wider uppercase">
+                UAV ROCKFALL MONITORING COMMAND CENTER
+              </h2>
+              <p class="text-xs text-slate-400">Autonomous edge scanning, continuous stability classification, and spatial Grad-CAM attention localization.</p>
+            </div>
+
+            <!-- Quick Rockface Preset Switcher (Instantly switch sample) -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono text-slate-400 hidden sm:inline">Load Sample:</span>
+              <button data-sample-id="sample-high-01" class="btn-load-preset-sample btn-industrial-outline text-xs py-1.5 px-2.5 text-red-400 border-red-800/50 hover:border-red-500">
+                🔴 Fractured Bench (High)
+              </button>
+              <button data-sample-id="sample-low-01" class="btn-load-preset-sample btn-industrial-outline text-xs py-1.5 px-2.5 text-emerald-400 border-emerald-800/50 hover:border-emerald-500">
+                🟢 Uniform Wall (Low)
+              </button>
+            </div>
+          </div>
+
+          <!-- Key Metrics Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Metric 1: AI Engine -->
+            <div class="industrial-card p-4">
+              <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
+                <span>AI Engine Status</span>
+                <i data-lucide="cpu" class="w-4 h-4 text-amber-500"></i>
+              </div>
+              <div class="text-lg font-heading font-bold text-slate-100">EfficientNet-B0</div>
+              <div class="text-xs font-mono text-emerald-400 mt-1 flex items-center gap-1.5">
+                <span class="status-dot online"></span>
+                <span>CUDA Accelerated (<span id="ai-cuda-latency">38.4 ms</span>)</span>
+              </div>
+            </div>
+
+            <!-- Metric 2: Device Telemetry -->
+            <div class="industrial-card p-4">
+              <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
+                <span>Active Telemetry Link</span>
+                <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
+              </div>
+              <div class="text-lg font-heading font-bold text-slate-100">UAV-01 / Vanguard</div>
+              <div class="text-xs font-mono text-cyan-400 mt-1 flex items-center gap-1.5">
+                <span class="status-dot online"></span>
+                <span id="uav-alt-display">142.4 m AGL</span> • 5G Ultra-Low Latency
+              </div>
+            </div>
+
+            <!-- Metric 3: Geotechnical Risk Status -->
+            <div class="industrial-card p-4">
+              <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
+                <span>Current Risk Level</span>
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-red-500"></i>
+              </div>
+              <div class="text-lg font-heading font-bold text-red-400">HIGH RISK DETECTED</div>
+              <div class="text-xs font-mono text-slate-400 mt-1">Bench 14 • Sector B-4 Daylight Fracture</div>
+            </div>
+
+            <!-- Metric 4: AI Validation Accuracy -->
+            <div class="industrial-card p-4">
+              <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
+                <span>Model Accuracy</span>
+                <i data-lucide="award" class="w-4 h-4 text-emerald-400"></i>
+              </div>
+              <div class="text-lg font-heading font-bold text-emerald-400">97.09% Validated</div>
+              <div class="text-xs font-mono text-slate-400 mt-1">2,764 Images • 2 Risk Classes</div>
+            </div>
+          </div>
+
+          <!-- Main Analysis & Grad-CAM Workspace (2-Column Grid) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Left Column: Grad-CAM Interactive Attention Visualizer (7 Cols) -->
+            <div class="lg:col-span-7 industrial-card p-5 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="layers" class="w-4 h-4 text-amber-500"></i>
+                    <h3 class="font-heading font-bold text-sm tracking-wider uppercase text-slate-200">
+                      VISUAL EVIDENCE & ATTENTION MAP (GRAD-CAM)
+                    </h3>
+                  </div>
+                  <!-- Mode Switcher -->
+                  <div class="flex items-center gap-1 bg-industrial-950 p-1 rounded border border-slate-800 text-xs font-mono">
+                    <button data-mode="overlay" class="btn-gradcam-mode px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-semibold">Overlay</button>
+                    <button data-mode="split" class="btn-gradcam-mode px-2.5 py-1 rounded text-slate-400 hover:text-slate-200">Split</button>
+                    <button data-mode="original" class="btn-gradcam-mode px-2.5 py-1 rounded text-slate-400 hover:text-slate-200">Original</button>
+                    <button data-mode="heatmap" class="btn-gradcam-mode px-2.5 py-1 rounded text-slate-400 hover:text-slate-200">Heatmap</button>
+                  </div>
+                </div>
+
+                <!-- Canvas Visualizer Container -->
+                <div class="gradcam-container w-full aspect-[3/2] flex items-center justify-center relative rounded overflow-hidden">
+                  <canvas id="gradcam-main-canvas" width="600" height="400" class="w-full h-full object-contain cursor-crosshair"></canvas>
+                  
+                  <!-- HUD Coordinate Reticle Overlay -->
+                  <div class="absolute bottom-2 left-2 bg-industrial-950/80 px-2 py-1 rounded text-[10px] font-mono text-cyan-400 border border-slate-800 pointer-events-none">
+                    TENSOR: 224×224 | INTERP: BILINEAR JET
+                  </div>
+                </div>
+
+                <!-- Attention Scale & Opacity Control Bar -->
+                <div class="mt-4 pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <!-- Colormap Legend (Attention Scale 0.0 - 1.0) -->
+                  <div class="w-full sm:w-auto">
+                    <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-1">
+                      <span>BASELINE (0.0)</span>
+                      <span class="font-bold text-amber-500">ATTENTION INTENSITY</span>
+                      <span>PEAK (1.0)</span>
+                    </div>
+                    <div class="h-2.5 w-full sm:w-60 rounded-full" style="background: linear-gradient(to right, #000080, #00ffff, #00ff00, #ffff00, #ff0000);"></div>
+                  </div>
+
+                  <!-- Heatmap Opacity Slider -->
+                  <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                    <span class="text-xs font-mono text-slate-400">Blend:</span>
+                    <input type="range" id="gradcam-opacity-slider" min="0" max="1" step="0.05" value="0.65" class="slider-industrial w-28">
+                    <span id="gradcam-opacity-label" class="text-xs font-mono text-amber-400 w-10 text-right">65%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Non-Technical Geotechnical Explanation Box -->
+              <div class="mt-4 p-3.5 rounded bg-industrial-850/80 border border-slate-800">
+                <div class="flex items-center gap-2 text-xs font-mono font-bold text-amber-400 uppercase tracking-wider mb-1.5">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                  <span>Field Safety Geotechnical Explanation:</span>
+                </div>
+                <p id="geological-summary-text" class="text-xs text-slate-300 leading-relaxed font-sans">
+                  Analyzing rockface structural discontinuity distribution...
+                </p>
+              </div>
+            </div>
+
+            <!-- Right Column: AI Risk Assessment & Probabilities (5 Cols) -->
+            <div class="lg:col-span-5 space-y-4 flex flex-col justify-between">
+              
+              <!-- Prominent AI Risk Assessment Card -->
+              <div class="industrial-card p-5">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                  <h3 class="font-heading font-bold text-sm tracking-wider uppercase text-slate-200">
+                    AI RISK ASSESSMENT
+                  </h3>
+                  <span class="badge-tech badge-tech-orange text-[10px]">EFFICIENTNET-B0</span>
+                </div>
+
+                <!-- Primary Result Badge -->
+                <div class="flex flex-col items-center justify-center p-4 rounded bg-industrial-950/70 border border-slate-800/80 mb-4">
+                  <div id="ai-risk-badge" class="mb-2">
+                    <!-- Dynamic: High Risk or Low Risk -->
+                  </div>
+                  <div id="ai-risk-desc" class="text-center font-mono text-xs text-slate-400 tracking-wider">
+                    CRITICAL HAZARD DETECTED
+                  </div>
+                </div>
+
+                <!-- Circular Confidence Gauge & Class Probabilities -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-3 rounded bg-industrial-950/50 border border-slate-800/60 mb-4">
+                  <!-- Circular Gauge SVG -->
+                  <div class="flex flex-col items-center justify-center">
+                    <div class="relative w-28 h-28 flex items-center justify-center">
+                      <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" stroke="#1f2b3e" stroke-width="8" fill="transparent"/>
+                        <circle id="gauge-confidence-circle" cx="50" cy="50" r="45" stroke="#ef4444" stroke-width="8" fill="transparent" stroke-linecap="round" class="transition-all duration-700"/>
+                      </svg>
+                      <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span id="gauge-confidence-text" class="font-mono font-bold text-xl text-slate-100">96.4%</span>
+                        <span class="text-[9px] font-mono text-slate-400 uppercase">Confidence</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Class Probabilities Comparison -->
+                  <div class="space-y-3 font-mono text-xs">
+                    <div>
+                      <div class="flex justify-between text-slate-300 mb-1">
+                        <span class="text-red-400 font-bold">High-Risk Prob:</span>
+                        <span id="prob-high-val" class="font-bold text-red-400">96.4%</span>
+                      </div>
+                      <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                        <div id="prob-high-bar" class="h-full bg-red-500 rounded-full transition-all duration-500" style="width: 96.4%"></div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="flex justify-between text-slate-300 mb-1">
+                        <span class="text-emerald-400 font-bold">Low-Risk Prob:</span>
+                        <span id="prob-low-val" class="font-bold text-emerald-400">3.6%</span>
+                      </div>
+                      <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                        <div id="prob-low-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: 3.6%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Geotechnical Visual Evidence Checklist -->
+                <div>
+                  <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Geotechnical Visual Evidence Tracing:</div>
+                  <div id="visual-indicators-list" class="space-y-1.5">
+                    <!-- Populated dynamically with checked/unchecked indicators -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fast Action Tools -->
+              <div class="industrial-card p-4">
+                <div class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Recent Monitoring Incidents</div>
+                <div id="recent-detections-list" class="space-y-2">
+                  <!-- Populated from detection history -->
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW: DRONE LIVE FEED (ADMIN)
+             ==================================================================== -->
+        <section id="view-drone-live" class="view-panel hidden space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+              <h2 class="font-heading font-bold text-lg text-amber-400 tracking-wider uppercase">
+                UAV-01 LIVE OPTICAL & THERMAL TELEMETRY STREAM
+              </h2>
+              <p class="text-xs text-slate-400">Autonomous flight path Bench 14 Sector B-4. High-resolution FLIR H20T optical sensor payload.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="status-dot online"></span>
+              <span class="text-xs font-mono text-emerald-400">5G ENCRYPTED LINK</span>
+            </div>
+          </div>
+
+          <div id="drone-live-stream-viewport">
+            <!-- Rendered by app.js -->
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: MINE CAMERA FEED (WORKER)
+             ==================================================================== -->
+        <section id="view-camera-live" class="view-panel hidden space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+              <h2 class="font-heading font-bold text-lg text-cyan-400 tracking-wider uppercase">
+                FIXED PERIMETER MINE CAMERA MONITORING MATRIX
+              </h2>
+              <p class="text-xs text-slate-400">Continuous 4K optical edge monitoring across active open-pit walls, haul road corridors, and crusher ramps.</p>
+            </div>
+            <span class="badge-tech badge-tech-cyan text-xs">4 FIXED CAMERAS ACTIVE</span>
+          </div>
+
+          <!-- 4-Camera Grid -->
+          <div id="camera-matrix-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Rendered by app.js -->
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: DRONE IMAGE UPLOAD (ADMIN)
+             ==================================================================== -->
+        <section id="view-drone-upload" class="view-panel hidden space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h2 class="font-heading font-bold text-lg text-amber-400 tracking-wider uppercase">
+              UAV AERIAL ROCKFACE IMAGE MANAGEMENT
+            </h2>
+            <p class="text-xs text-slate-400">Upload high-resolution orthomosaic captures or drone bench photos for automated Grad-CAM analysis.</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Left Upload Interface (8 Cols) -->
+            <div class="lg:col-span-8 industrial-card p-6">
+              <!-- Drag & Drop Zone -->
+              <div id="drone-drop-zone" class="border-2 border-dashed border-slate-700 hover:border-amber-500 bg-industrial-950/60 rounded-lg p-8 text-center cursor-pointer transition-colors">
+                <input type="file" id="drone-file-input" accept="image/*" class="hidden">
+                <i data-lucide="upload-cloud" class="w-12 h-12 text-amber-500 mx-auto mb-3 animate-pulse"></i>
+                <h4 class="font-heading font-bold text-base text-slate-200 uppercase tracking-wider mb-1">
+                  Drag & Drop Drone Rockface Capture
+                </h4>
+                <p class="text-xs text-slate-400 mb-4">Supports RAW, PNG, JPEG, TIFF high-resolution geological scans up to 50MB</p>
+                <button type="button" class="btn-industrial-outline text-xs py-2 px-4">
+                  <i data-lucide="folder-open" class="w-4 h-4"></i> Browse Local Storage
+                </button>
+              </div>
+
+              <!-- Upload Metadata Details & Preview -->
+              <div id="drone-meta-box" class="hidden mt-4 p-4 rounded bg-industrial-950 border border-slate-800">
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                  <img id="drone-image-preview" src="" alt="Drone Preview" class="w-32 h-24 object-cover rounded border border-slate-700">
+                  <div class="flex-1 text-xs font-mono space-y-1">
+                    <div><span class="text-slate-500">Filename:</span> <span id="drone-filename-text" class="text-slate-200">photo.jpg</span></div>
+                    <div><span class="text-slate-500">File Size:</span> <span id="drone-filesize-text" class="text-slate-300">4.2 MB</span></div>
+                    <div><span class="text-slate-500">Target Sensor:</span> <span class="text-amber-400">UAV-01 Vanguard (FLIR H20T 4K)</span></div>
+                    <div><span class="text-slate-500">Timestamp:</span> <span class="text-slate-300">Synchronized RTK</span></div>
+                  </div>
+                </div>
+
+                <div id="drone-upload-progress" class="hidden mt-3 pt-3 border-t border-slate-800">
+                  <div class="flex justify-between text-[11px] font-mono text-slate-400 mb-1">
+                    <span id="drone-processing-status">PROCESSING TENSOR INPUT...</span>
+                    <span>38ms ETA</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                    <div class="h-full bg-amber-500 rounded-full w-full animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Primary Action -->
+              <div class="mt-6 flex justify-end">
+                <button type="button" id="btn-drone-analyze" class="btn-industrial-primary py-3 px-6 text-sm">
+                  <span>ANALYZE IMAGE →</span>
+                  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Preset Test Bench Samples (4 Cols) -->
+            <div class="lg:col-span-4 industrial-card p-5">
+              <div class="text-xs font-heading font-bold text-slate-200 uppercase tracking-wider mb-2 border-b border-slate-800 pb-2">
+                Benchmarking Samples (1-Click Test)
+              </div>
+              <p class="text-xs text-slate-400 mb-3">Instantly load calibrated rockface profiles from open-pit sector benches:</p>
+
+              <div class="space-y-3">
+                <button data-sample-id="sample-high-01" class="btn-load-preset-sample w-full p-3 rounded bg-industrial-950 border border-red-900/50 hover:border-red-500 text-left transition-colors">
+                  <div class="flex items-center justify-between text-xs font-mono font-bold text-red-400 mb-1">
+                    <span>Bench 14 - Fractured Shear</span>
+                    <span class="status-dot danger"></span>
+                  </div>
+                  <p class="text-[11px] text-slate-400">High density planar fractures, daylighting slip surface.</p>
+                </button>
+
+                <button data-sample-id="sample-low-01" class="btn-load-preset-sample w-full p-3 rounded bg-industrial-950 border border-emerald-900/50 hover:border-emerald-500 text-left transition-colors">
+                  <div class="flex items-center justify-between text-xs font-mono font-bold text-emerald-400 mb-1">
+                    <span>South Pit Wall - Monolithic</span>
+                    <span class="status-dot online"></span>
+                  </div>
+                  <p class="text-[11px] text-slate-400">Sound granodiorite rock mass, tight interlocking joints.</p>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: CAMERA IMAGE UPLOAD (WORKER)
+             ==================================================================== -->
+        <section id="view-camera-upload" class="view-panel hidden space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h2 class="font-heading font-bold text-lg text-cyan-400 tracking-wider uppercase">
+              MINE CAMERA INPUT & MANUAL SCAN
+            </h2>
+            <p class="text-xs text-slate-400">Select fixed mine camera or submit perimeter rockface snapshot for instant rockfall threat evaluation.</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Left Upload Card (8 Cols) -->
+            <div class="lg:col-span-8 industrial-card p-6">
+              
+              <!-- Camera Selection Dropdown -->
+              <div class="mb-5">
+                <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Select Fixed Mine Camera Source:</label>
+                <select id="camera-select-dropdown" class="w-full bg-industrial-950 border border-slate-800 rounded px-3 py-2.5 text-sm text-slate-200 font-mono focus:border-cyan-500 focus:outline-none">
+                  <option value="CAM-01">CAM-01 — North Bench Pit Wall (Sector B-12)</option>
+                  <option value="CAM-02" selected>CAM-02 — Haul Road East Cut (MP 4.2 Switchback)</option>
+                  <option value="CAM-03">CAM-03 — South Pit Wall Overlook (Sector A-1)</option>
+                  <option value="CAM-04">CAM-04 — Primary Crusher Access Bluff (Sector D-3)</option>
+                </select>
+                <div class="mt-1 text-[11px] font-mono text-cyan-400" id="cam-upload-location-display">
+                  Location: Haul Road MP 4.2 Switchback (21°44'31"N, 85°19'02"E)
+                </div>
+              </div>
+
+              <!-- Drag & Drop Zone -->
+              <div id="camera-drop-zone" class="border-2 border-dashed border-slate-700 hover:border-cyan-500 bg-industrial-950/60 rounded-lg p-8 text-center cursor-pointer transition-colors">
+                <input type="file" id="camera-file-input" accept="image/*" class="hidden">
+                <i data-lucide="camera" class="w-12 h-12 text-cyan-400 mx-auto mb-3 animate-pulse"></i>
+                <h4 class="font-heading font-bold text-base text-slate-200 uppercase tracking-wider mb-1">
+                  Drag & Drop Mine Camera Capture
+                </h4>
+                <p class="text-xs text-slate-400 mb-4">Capture snapshot from optical matrix or upload inspection photo</p>
+                <button type="button" class="btn-industrial-outline text-xs py-2 px-4">
+                  <i data-lucide="folder-open" class="w-4 h-4"></i> Browse Local Files
+                </button>
+              </div>
+
+              <!-- Metadata Preview -->
+              <div id="camera-meta-box" class="hidden mt-4 p-4 rounded bg-industrial-950 border border-slate-800">
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                  <img id="camera-image-preview" src="" alt="Camera Preview" class="w-32 h-24 object-cover rounded border border-slate-700">
+                  <div class="flex-1 text-xs font-mono space-y-1">
+                    <div><span class="text-slate-500">File:</span> <span id="camera-filename-text" class="text-slate-200">cam_snap.jpg</span></div>
+                    <div><span class="text-slate-500">Resolution:</span> <span id="camera-filesize-text" class="text-slate-300">1920×1080</span></div>
+                    <div><span class="text-slate-500">Edge Pipeline:</span> <span class="text-cyan-400">Active Real-Time Inference</span></div>
+                  </div>
+                </div>
+
+                <div id="camera-upload-progress" class="hidden mt-3 pt-3 border-t border-slate-800">
+                  <div class="flex justify-between text-[11px] font-mono text-slate-400 mb-1">
+                    <span id="camera-processing-status">PROCESSING TENSOR INPUT...</span>
+                    <span>42ms ETA</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                    <div class="h-full bg-cyan-500 rounded-full w-full animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Primary Action -->
+              <div class="mt-6 flex justify-end">
+                <button type="button" id="btn-camera-analyze" class="btn-industrial-primary py-3 px-6 text-sm bg-cyan-500 hover:bg-cyan-400 text-slate-950">
+                  <span>ANALYZE IMAGE →</span>
+                  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Field Reference & Calibration (4 Cols) -->
+            <div class="lg:col-span-4 industrial-card p-5">
+              <div class="text-xs font-heading font-bold text-slate-200 uppercase tracking-wider mb-2 border-b border-slate-800 pb-2">
+                Quick Pit Wall Verification
+              </div>
+              <p class="text-xs text-slate-400 mb-3">Load reference scans from fixed camera benchmarks:</p>
+
+              <div class="space-y-3">
+                <button data-sample-id="sample-high-02" class="btn-load-preset-sample w-full p-3 rounded bg-industrial-950 border border-red-900/50 hover:border-red-500 text-left transition-colors">
+                  <div class="flex items-center justify-between text-xs font-mono font-bold text-red-400 mb-1">
+                    <span>CAM-02 Haul Road Overhang</span>
+                    <span class="status-dot danger"></span>
+                  </div>
+                  <p class="text-[11px] text-slate-400">Tension crest crack directly above heavy vehicle route.</p>
+                </button>
+
+                <button data-sample-id="sample-low-02" class="btn-load-preset-sample w-full p-3 rounded bg-industrial-950 border border-emerald-900/50 hover:border-emerald-500 text-left transition-colors">
+                  <div class="flex items-center justify-between text-xs font-mono font-bold text-emerald-400 mb-1">
+                    <span>CAM-01 Crusher Access</span>
+                    <span class="status-dot online"></span>
+                  </div>
+                  <p class="text-[11px] text-slate-400">Competent columnar basalt, high frictional resistance.</p>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: AI RISK ANALYSIS (DEDICATED FULL VIEW)
+             ==================================================================== -->
+        <section id="view-ai-analysis" class="view-panel hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+              <h2 class="font-heading font-bold text-lg text-slate-100 tracking-wider uppercase">
+                DEEP GEOTECHNICAL AI RISK ANALYSIS ENGINE
+              </h2>
+              <p class="text-xs text-slate-400">Spatial feature extraction, gradient backpropagation, and geotechnical visual indicator correlation.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge-tech badge-tech-orange text-xs">BACKBONE: EfficientNet-B0</span>
+              <span class="badge-tech badge-tech-cyan text-xs">ACCEL: CUDA TensorRT</span>
+            </div>
+          </div>
+
+          <!-- Neural Network Architecture Pipeline Diagram -->
+          <div class="industrial-card p-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+              <h3 class="font-heading font-bold text-sm tracking-wider uppercase text-amber-400 flex items-center gap-2">
+                <i data-lucide="cpu" class="w-4 h-4"></i> Convolutional Architecture Flow & Grad-CAM Tap
+              </h3>
+              <span class="text-xs font-mono text-slate-400">Input: 224 × 224 × 3 (RGB/Thermal)</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-center font-mono text-xs">
+              <div class="p-2.5 rounded bg-industrial-950 border border-slate-800">
+                <div class="text-[10px] text-slate-500">STEM CONV</div>
+                <div class="font-bold text-slate-200">Conv 3×3</div>
+                <div class="text-[9px] text-cyan-400">Stride 2 • 32ch</div>
+              </div>
+              <div class="p-2.5 rounded bg-industrial-950 border border-slate-800">
+                <div class="text-[10px] text-slate-500">STAGE 1-2</div>
+                <div class="font-bold text-slate-200">MBConv1/6</div>
+                <div class="text-[9px] text-cyan-400">Kernel 3×3 • 40ch</div>
+              </div>
+              <div class="p-2.5 rounded bg-industrial-950 border border-slate-800">
+                <div class="text-[10px] text-slate-500">STAGE 3-4</div>
+                <div class="font-bold text-slate-200">MBConv6 (x5)</div>
+                <div class="text-[9px] text-cyan-400">Kernel 5×5 • 112ch</div>
+              </div>
+              <div class="p-2.5 rounded bg-industrial-950 border border-slate-800">
+                <div class="text-[10px] text-slate-500">STAGE 5-6</div>
+                <div class="font-bold text-slate-200">MBConv6 (x4)</div>
+                <div class="text-[9px] text-cyan-400">Kernel 5×5 • 192ch</div>
+              </div>
+              <div class="p-2.5 rounded bg-industrial-950 border border-amber-500/50 bg-amber-500/10">
+                <div class="text-[10px] text-amber-400 font-bold">GRAD-CAM TAP</div>
+                <div class="font-bold text-amber-300">Conv Head 1×1</div>
+                <div class="text-[9px] text-amber-400">1280ch Feature Map</div>
+              </div>
+              <div class="p-2.5 rounded bg-industrial-950 border border-slate-800">
+                <div class="text-[10px] text-slate-500">POOLING</div>
+                <div class="font-bold text-slate-200">Adaptive Avg</div>
+                <div class="text-[9px] text-cyan-400">7×7 → 1×1</div>
+              </div>
+              <div class="p-2.5 rounded bg-industrial-950 border border-emerald-500/50 bg-emerald-500/10">
+                <div class="text-[10px] text-emerald-400 font-bold">CLASSIFIER</div>
+                <div class="font-bold text-emerald-300">Softmax Head</div>
+                <div class="text-[9px] text-emerald-400">Low / High Risk</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mathematical Formulation & Geotechnical Metrics (2 Cols) -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Explainability Mathematics -->
+            <div class="industrial-card p-5">
+              <h3 class="font-heading font-bold text-sm text-slate-200 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <i data-lucide="calculator" class="w-4 h-4 text-purple-400"></i> Grad-CAM Mathematical Formulation
+              </h3>
+              <p class="text-xs text-slate-400 mb-3 leading-relaxed">
+                Gradient-weighted Class Activation Mapping calculates neuron importance weights \(\alpha_k^c\) by taking gradients of the target risk score \(y^c\) with respect to feature maps \(A^k\):
+              </p>
+              <div class="p-3 bg-industrial-950 rounded border border-slate-800 font-mono text-xs text-amber-400 text-center space-y-2 mb-3">
+                <div>$$\alpha_k^c = \frac{1}{Z} \sum_{i} \sum_{j} \frac{\partial y^c}{\partial A_{i,j}^k}$$</div>
+                <div class="text-emerald-400">$$L_{\text{Grad-CAM}}^c = \text{ReLU}\left(\sum_k \alpha_k^c A^k\right)$$</div>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                The resulting activation map generates heat intensity corresponding to pixel regions that directly drove the model to predict High Rockfall Risk.
+              </p>
+            </div>
+
+            <!-- Geotechnical Structural Indicators -->
+            <div class="industrial-card p-5">
+              <h3 class="font-heading font-bold text-sm text-slate-200 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <i data-lucide="activity" class="w-4 h-4 text-red-400"></i> Geotechnical Structural Indices
+              </h3>
+              <div class="space-y-3 font-mono text-xs">
+                <div class="flex items-center justify-between p-2.5 rounded bg-industrial-950 border border-slate-800">
+                  <span class="text-slate-400">Discontinuity Density:</span>
+                  <span class="text-red-400 font-bold">88.4% [SEVERE JOINTING]</span>
+                </div>
+                <div class="flex items-center justify-between p-2.5 rounded bg-industrial-950 border border-slate-800">
+                  <span class="text-slate-400">Planar Daylighting Dip:</span>
+                  <span class="text-amber-400 font-bold">64° Sub-vertical</span>
+                </div>
+                <div class="flex items-center justify-between p-2.5 rounded bg-industrial-950 border border-slate-800">
+                  <span class="text-slate-400">Block Aspect Ratio (L/W):</span>
+                  <span class="text-slate-200 font-bold">2.84 [Elongated Wedge]</span>
+                </div>
+                <div class="flex items-center justify-between p-2.5 rounded bg-industrial-950 border border-slate-800">
+                  <span class="text-slate-400">Cohesion Degradation Factor:</span>
+                  <span class="text-red-400 font-bold">0.18 [High Spalling Risk]</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Test Bench with all 4 samples -->
+          <div class="industrial-card p-5">
+            <h3 class="font-heading font-bold text-sm text-slate-200 uppercase tracking-wider mb-3">
+              Calibrated Open-Pit Slope Datasets (Select for Instant Inference)
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <button data-sample-id="sample-high-01" class="btn-load-preset-sample p-3 rounded bg-industrial-950 border border-red-800/60 hover:border-red-500 text-left transition-colors">
+                <div class="font-mono text-xs font-bold text-red-400 mb-1 flex items-center justify-between">
+                  <span>Bench 14 Shear Wall</span>
+                  <span class="badge-tech badge-tech-red text-[10px]">HIGH RISK</span>
+                </div>
+                <p class="text-[11px] text-slate-400">UAV-01 • Sector B-4 • 96.4% Conf</p>
+              </button>
+
+              <button data-sample-id="sample-high-02" class="btn-load-preset-sample p-3 rounded bg-industrial-950 border border-red-800/60 hover:border-red-500 text-left transition-colors">
+                <div class="font-mono text-xs font-bold text-red-400 mb-1 flex items-center justify-between">
+                  <span>Haul Road Overhang</span>
+                  <span class="badge-tech badge-tech-red text-[10px]">HIGH RISK</span>
+                </div>
+                <p class="text-[11px] text-slate-400">CAM-02 • MP 4.2 • 94.8% Conf</p>
+              </button>
+
+              <button data-sample-id="sample-low-01" class="btn-load-preset-sample p-3 rounded bg-industrial-950 border border-emerald-800/60 hover:border-emerald-500 text-left transition-colors">
+                <div class="font-mono text-xs font-bold text-emerald-400 mb-1 flex items-center justify-between">
+                  <span>South Pit Monolithic</span>
+                  <span class="badge-tech badge-tech-green text-[10px]">LOW RISK</span>
+                </div>
+                <p class="text-[11px] text-slate-400">UAV-01 • Sector A-1 • 97.2% Conf</p>
+              </button>
+
+              <button data-sample-id="sample-low-02" class="btn-load-preset-sample p-3 rounded bg-industrial-950 border border-emerald-800/60 hover:border-emerald-500 text-left transition-colors">
+                <div class="font-mono text-xs font-bold text-emerald-400 mb-1 flex items-center justify-between">
+                  <span>Crusher Columnar Basalt</span>
+                  <span class="badge-tech badge-tech-green text-[10px]">LOW RISK</span>
+                </div>
+                <p class="text-[11px] text-slate-400">CAM-01 • Sector D-3 • 98.1% Conf</p>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: DETECTION HISTORY
+             ==================================================================== -->
+        <section id="view-history" class="view-panel hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+              <h2 class="font-heading font-bold text-lg text-slate-100 tracking-wider uppercase">
+                DETECTION HISTORY & INCIDENT AUDIT LOG
+              </h2>
+              <p class="text-xs text-slate-400">Immutable logging of all drone aerial passes and perimeter camera rockfall evaluations.</p>
+            </div>
+          </div>
+
+          <!-- Multi-Criteria Filters Bar -->
+          <div class="industrial-card p-4 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono">
+            <!-- Source Filter (ALL, DRONE, CAMERA) -->
+            <div class="flex items-center gap-2 w-full md:w-auto">
+              <span class="text-slate-400">Source:</span>
+              <div class="flex items-center gap-1 bg-industrial-950 p-1 rounded border border-slate-800">
+                <button data-source="ALL" class="btn-filter-source px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-semibold">ALL</button>
+                <button data-source="DRONE" class="btn-filter-source px-2.5 py-1 rounded text-slate-400 hover:text-slate-200">DRONE</button>
+                <button data-source="CAMERA" class="btn-filter-source px-2.5 py-1 rounded text-slate-400 hover:text-slate-200">CAMERA</button>
+              </div>
+            </div>
+
+            <!-- Risk Filter -->
+            <div class="flex items-center gap-2 w-full md:w-auto">
+              <span class="text-slate-400">Risk Level:</span>
+              <select id="history-risk-filter" class="bg-industrial-950 border border-slate-800 rounded px-2.5 py-1 text-slate-300">
+                <option value="ALL">All Levels</option>
+                <option value="HIGH">High Risk Only</option>
+                <option value="LOW">Low Risk Only</option>
+              </select>
+            </div>
+
+            <!-- Search Query -->
+            <div class="relative w-full md:w-64">
+              <input type="text" id="history-search-input" placeholder="Search ID, Device, Sector..." class="w-full bg-industrial-950 border border-slate-800 rounded px-3 py-1.5 pl-8 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-500">
+              <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2"></i>
+            </div>
+          </div>
+
+          <!-- History Table -->
+          <div class="industrial-card overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="history-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Source</th>
+                    <th>Device</th>
+                    <th>Image</th>
+                    <th>Risk Level</th>
+                    <th>Confidence</th>
+                    <th>Review Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body">
+                  <!-- Populated from history-store.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: DEVICE STATUS (DRONE FLEET & CAMERA ARRAY)
+             ==================================================================== -->
+        <section id="view-device-status" class="view-panel hidden space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h2 class="font-heading font-bold text-lg text-slate-100 tracking-wider uppercase">
+              MONITORING SENSOR & DEVICE NETWORK STATUS
+            </h2>
+            <p class="text-xs text-slate-400">Telemetry heartbeats, signal strength, optical lens cleanliness, and edge compute health.</p>
+          </div>
+
+          <div id="device-status-content">
+            <!-- Rendered by app.js based on role -->
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: ALERTS (WORKER)
+             ==================================================================== -->
+        <section id="view-alerts" class="view-panel hidden space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h2 class="font-heading font-bold text-lg text-red-400 tracking-wider uppercase">
+              MINE SAFETY ROCKFALL EMERGENCY ALERTS
+            </h2>
+            <p class="text-xs text-slate-400">Immediate hazard notifications requiring geotechnical dispatch, road barricading, or pit evacuation.</p>
+          </div>
+
+          <div id="alerts-content">
+            <!-- Rendered by app.js -->
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: SYSTEM WORKFLOW PIPELINE
+             ==================================================================== -->
+        <section id="view-workflow" class="view-panel hidden space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h2 class="font-heading font-bold text-lg text-slate-100 tracking-wider uppercase">
+              END-TO-END AI ROCKFALL MONITORING ARCHITECTURE
+            </h2>
+            <p class="text-xs text-slate-400">Connected visual pipeline for autonomous aerial UAVs and fixed pit wall cameras.</p>
+          </div>
+
+          <div id="workflow-content">
+            <!-- Rendered by app.js -->
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: REPORTS & MODEL BENCHMARKS
+             ==================================================================== -->
+        <section id="view-reports" class="view-panel hidden space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h2 class="font-heading font-bold text-lg text-slate-100 tracking-wider uppercase">
+              SAFETY AUDIT, COMPLIANCE & AI MODEL REPORT
+            </h2>
+            <p class="text-xs text-slate-400">Quantitative verification metrics, dataset benchmarking, confusion matrix, and safety incident logs.</p>
+          </div>
+
+          <div id="reports-content">
+            <!-- Rendered by app.js -->
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: SETTINGS
+             ==================================================================== -->
+        <section id="view-settings" class="view-panel hidden space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h2 class="font-heading font-bold text-lg text-slate-100 tracking-wider uppercase">
+              SYSTEM CONFIGURATION & SENSOR THRESHOLDS
+            </h2>
+            <p class="text-xs text-slate-400">Geotechnical alarm sensitivities, RTSP stream parameters, and siren broadcast levels.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="industrial-card p-5 space-y-4">
+              <h3 class="font-heading font-bold text-sm text-amber-400 uppercase tracking-wider">AI Model & Inference Limits</h3>
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1">High-Risk Trigger Threshold</label>
+                <input type="range" min="70" max="98" value="85" class="slider-industrial w-full">
+                <div class="flex justify-between text-[11px] font-mono text-slate-500 mt-1">
+                  <span>Sensitive (70%)</span>
+                  <span class="text-amber-400 font-bold">Standard (85%)</span>
+                  <span>Conservative (98%)</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1">Inference Engine</label>
+                <select class="w-full bg-industrial-950 border border-slate-800 rounded px-3 py-2 text-xs font-mono text-slate-300">
+                  <option>CUDA TensorRT (FP16 Accelerated)</option>
+                  <option>PyTorch DirectML</option>
+                  <option>Edge TPU Quantized INT8</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="industrial-card p-5 space-y-4">
+              <h3 class="font-heading font-bold text-sm text-cyan-400 uppercase tracking-wider">Audio & Safety Broadcasts</h3>
+              <div class="flex items-center justify-between text-xs font-mono py-2 border-b border-slate-800">
+                <span class="text-slate-300">Audible Siren On High Risk</span>
+                <input type="checkbox" checked class="w-4 h-4 accent-amber-500">
+              </div>
+              <div class="flex items-center justify-between text-xs font-mono py-2 border-b border-slate-800">
+                <span class="text-slate-300">Radio Channel 4 Emergency Dispatch</span>
+                <input type="checkbox" checked class="w-4 h-4 accent-amber-500">
+              </div>
+              <div class="flex items-center justify-between text-xs font-mono py-2">
+                <span class="text-slate-300">Continuous 4K RTSP Video Buffering</span>
+                <input type="checkbox" checked class="w-4 h-4 accent-cyan-500">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW: HELP & GEOTECH GUIDE
+             ==================================================================== -->
+        <section id="view-help" class="view-panel hidden space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h2 class="font-heading font-bold text-lg text-slate-100 tracking-wider uppercase">
+              OPERATIONAL MANUAL & GEOTECHNICAL USER GUIDE
+            </h2>
+            <p class="text-xs text-slate-400">Standard operating procedures for open-pit slope hazard detection and Grad-CAM interpretation.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="industrial-card p-4">
+              <div class="font-heading font-bold text-amber-400 text-sm mb-2 flex items-center gap-2">
+                <i data-lucide="plane" class="w-4 h-4"></i> UAV Aerial Protocol
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Autonomous drone patrols should be dispatched twice per shift. Maintain a minimum standoff distance of 25m from the bench face. Align the FLIR gimbal at -45° to capture sub-vertical fracture daylighting angles.
+              </p>
+            </div>
+
+            <div class="industrial-card p-4">
+              <div class="font-heading font-bold text-cyan-400 text-sm mb-2 flex items-center gap-2">
+                <i data-lucide="video" class="w-4 h-4"></i> Fixed Camera Maintenance
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Ensure optical lens wiper cycles run every 2 hours during high-dust blasting operations. CAM-02 overlooking the haul road must have unimpeded line-of-sight across the switchback crest wedge.
+              </p>
+            </div>
+
+            <div class="industrial-card p-4">
+              <div class="font-heading font-bold text-red-400 text-sm mb-2 flex items-center gap-2">
+                <i data-lucide="alert-triangle" class="w-4 h-4"></i> High-Risk Protocol
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                When High Risk is detected (>85% probability), immediately trigger the pit alarm, notify haul truck dispatch to halt vehicles beneath the sector, and dispatch a geotechnical engineer with prism survey gear.
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- Bottom Tactical Status Strip -->
+    <footer class="h-7 bg-industrial-950 border-t border-slate-800 px-4 flex items-center justify-between text-[11px] font-mono text-slate-500 z-20">
+      <div class="flex items-center gap-4">
+        <span>ENCRYPTED SECURE LINK</span>
+        <span class="hidden sm:inline text-slate-600">|</span>
+        <span class="hidden sm:inline text-slate-400">NVIDIA TensorRT CUDA-12</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-amber-500 font-semibold">ROCKFALL AI PLATFORM</span>
+        <span>© 2026 OPEN-PIT MINE SAFETY</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ========================================================================
+       MODAL: INSPECT DETECTION RECORD & GRAD-CAM DETAIL
+       ======================================================================== -->
+  <div id="inspect-modal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+    <div class="relative w-full max-w-4xl industrial-card p-6 bg-industrial-900 border-slate-700 shadow-2xl max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+        <div>
+          <h3 id="inspect-modal-title" class="font-heading font-bold text-base text-amber-400 uppercase tracking-wider">
+            DET-2026-9041 — CAM-02 [CAMERA]
+          </h3>
+          <p id="inspect-modal-meta" class="text-xs font-mono text-slate-400">
+            Haul Road East MP 4.2 | Time: 2026-09-05 15:10:02 | Confidence: 94.8%
+          </p>
+        </div>
+        <button id="btn-close-inspect-modal" class="p-1.5 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <!-- Canvas Visualizer in Modal (7 cols) -->
+        <div class="md:col-span-7">
+          <div class="gradcam-container w-full aspect-[3/2] rounded overflow-hidden">
+            <canvas id="inspect-gradcam-canvas" width="600" height="400" class="w-full h-full object-contain"></canvas>
+          </div>
+          <div class="mt-2 text-[10px] font-mono text-slate-500 text-center">
+            Grad-CAM Convolutional Layer: Feature Map Class-Activation Target
+          </div>
+        </div>
+
+        <!-- Details & Action Panel (5 cols) -->
+        <div class="md:col-span-5 space-y-4 flex flex-col justify-between text-xs font-mono">
+          <div class="space-y-3">
+            <div class="p-3 rounded bg-industrial-950 border border-slate-800">
+              <span class="text-slate-500 block mb-1">CURRENT REVIEW STATUS</span>
+              <span id="inspect-modal-status" class="text-amber-400 font-bold text-sm">ACTION DISPATCHED</span>
+            </div>
+
+            <div class="p-3 rounded bg-industrial-950 border border-slate-800">
+              <span class="text-slate-500 block mb-1">LOGGED BY / REVIEWER</span>
+              <span id="inspect-modal-reviewer" class="text-slate-200">Geotech Desk (Lead D. Vance)</span>
+            </div>
+
+            <div class="p-3 rounded bg-industrial-950 border border-slate-800">
+              <span class="text-slate-500 block mb-1">GEOTECHNICAL REASONING</span>
+              <p id="inspect-geological-explanation" class="text-slate-300 font-sans leading-relaxed text-xs">
+                Structural discontinuity scan...
+              </p>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="space-y-2 pt-3 border-t border-slate-800">
+            <button id="btn-modal-action-ack" class="btn-industrial-outline w-full justify-center py-2 text-xs">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Mark Acknowledged
+            </button>
+            <button id="btn-modal-action-escalate" class="btn-danger-action w-full justify-center py-2 text-xs">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i> Escalate Emergency Dispatch
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Application JavaScript Modules -->
+  <script src="js/sample-data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/gradcam-canvas.js"></script>
+  <script src="js/ai-engine.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/telemetry.js"></script>
+  <script src="js/history-store.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
